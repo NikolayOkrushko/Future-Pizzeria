@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Pizzeria/GameModule/Scenes/Game.unity
+    guid: ad75c76766a24384b8515b5d940c15ec
   m_configObjects: {}
