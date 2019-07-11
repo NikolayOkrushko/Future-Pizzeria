@@ -1,10 +1,11 @@
 ﻿using Pizzeria.GameModule.CharacterModule;
 using Pizzeria.GameModule.RootModule;
+using System.Collections;
 using UnityEngine;
 
 namespace Pizzeria.GameModule.DirectorModule
 {
-    public class Director : MonoBehaviour, IDirector
+    public class Director : IDirector
     {
         private IOutDirectorController directorController;
         private ICharacterController characterController;
@@ -35,6 +36,7 @@ namespace Pizzeria.GameModule.DirectorModule
         {
             characterController = RootController.GetControllerByType<ICharacterController>();
             CreateAWaiter();
+            CreateACook();
         }
     }
 }

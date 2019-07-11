@@ -1,16 +1,17 @@
-﻿
-using GameModule.GlobalModule.GlobalUpdate;
+﻿using GameModule.GlobalModule.GlobalUpdate;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Pizzeria.GameModule.RootModule.ControllerCreators;
 using System;
 
+
 namespace Pizzeria.GameModule.RootModule
 {
     public class RootController : MonoBehaviour
     {
         public static event Action OnModuleAreReady;
+        public static GlobalUpdate globalUpdate { get; private set; }
 
         private static Dictionary<System.Type, object> moduleControllers;
 
@@ -71,8 +72,7 @@ namespace Pizzeria.GameModule.RootModule
 
         private void ActivateGlobalServices()
         {
-            var go = new GameObject("GlobalUpdate");
-            go.AddComponent<GlobalUpdate>();
+            globalUpdate = new GameObject("GlobalUpdate").AddComponent<GlobalUpdate>();
         }
         #endregion Private
 

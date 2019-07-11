@@ -1,4 +1,5 @@
 ﻿using Pizzeria.GameModule.CharacterModule.States;
+using Pizzeria.GameModule.RootModule;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,6 +11,7 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
         ICharacterController characterController;
         private Animator animator;
         private NavMeshAgent navMeshAgent;
+        private Transform defaultPlace;
 
 
 
@@ -19,6 +21,7 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
             characterController = controller;
             animator = currentAnimator;
             navMeshAgent = currentNavMeshAgent;
+            defaultPlace = currentWaiterState.WaitPointWaiter;
             Execute();
         }
 
@@ -37,16 +40,10 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
 
         private void PrepareForTheMoving()
         {
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate += CustomUpdate;
-            ChoosePlaceForWaiting();
+            RootController.globalUpdate.OnCustomUpdate += CustomUpdate;
+            MoveToPoint(defaultPlace);
         }
 
-        private void ChoosePlaceForWaiting()
-        {
-            var places = characterController.GetPlaceToWait();
-            var choosePlace = Random.Range(0, places.Length);
-            MoveToPoint(places[choosePlace]);
-        }
 
 
         private void MoveToPoint(Transform waitPlace)
@@ -59,7 +56,8 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
         {
             navMeshAgent.isStopped = true;
             animator.SetFloat("Animation", 0);
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate -= CustomUpdate;
+            RootController.globalUpdate.OnCustomUpdate -= CustomUpdate;
+            ChangeState();
         }
 
 

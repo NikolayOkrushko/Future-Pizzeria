@@ -1,4 +1,5 @@
-﻿using Pizzeria.GameModule.TableModule;
+﻿using Pizzeria.GameModule.RootModule;
+using Pizzeria.GameModule.TableModule;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -43,7 +44,7 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
         {
             var currentTable = table.GetVisitorPlace();
             var choosePlaceToSit = Random.Range(0, currentTable.Length);
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate += CustomUpdate;
+            RootController.globalUpdate.OnCustomUpdate += CustomUpdate;
 
             StartMove(currentTable[choosePlaceToSit]);
         }
@@ -70,7 +71,7 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
             currentAnimator.SetTrigger("SitDown");
             currentTable.TakeATable(characterController);
             visitorState.visitorAnimatorController.OnAnimationEnd += ChangeStateCallTheWaiter;
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate -= CustomUpdate;
+            RootController.globalUpdate.OnCustomUpdate -= CustomUpdate;
 
         }
 

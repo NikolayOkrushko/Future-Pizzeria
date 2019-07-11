@@ -7,6 +7,6 @@ namespace Pizzeria.GameModule.AdministratorModule
 {
     public interface IOutAdministratorController
     {
-        List<TableUniversal> GetTablesHall();
+     
     }
 }

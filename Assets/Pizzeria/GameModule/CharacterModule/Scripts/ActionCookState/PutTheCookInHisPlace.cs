@@ -27,17 +27,17 @@ namespace Pizzeria.GameModule.CharacterModule.ActionCookState
 
         private void GetForPlaceInAdministrator()
         {
-            var placeCook = characterController.GetCookPlace();
+            var placeCook = characterController.GetCookTablePlace();
             var chooseTable = Random.Range(0, placeCook.Length);
             cookState.RememberTheTable(placeCook[chooseTable]);
             var choosePlace = placeCook[chooseTable].GetCookPlace();
-
+            PutInPlaceACook(placeCook[chooseTable]);
         }
 
         private void PutInPlaceACook(TableUniversal table)
         {
             cookState.transform.position = table.transform.position;
-
+            ChangeState();
         }
 
         private void ChangeState()

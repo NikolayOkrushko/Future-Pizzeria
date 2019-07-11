@@ -17,6 +17,7 @@ namespace Pizzeria.GameModule.CharacterModule.States
         public void Init(ICharacterController controller)
         {
             characterController = controller;
+            animator = GetComponent<Animator>();
             Execute();
         }
 
@@ -45,7 +46,7 @@ namespace Pizzeria.GameModule.CharacterModule.States
 
         public void WaitingForWork()
         {
-
+            currentBehaviour = new WaitingForWork(this, characterController, animator);
         }
 
         public void PrepareAnOrder(TableUniversal table)

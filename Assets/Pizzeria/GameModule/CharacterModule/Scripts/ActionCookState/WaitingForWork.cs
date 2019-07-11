@@ -30,16 +30,18 @@ namespace Pizzeria.GameModule.CharacterModule.ActionCookState
 
         private void SubscribeToOrder()
         {
-            // Подписатся на событие есть заказ у администратора
+            characterController.AdministratorController.OnWorkForCook += ChangeState;
+            StartAnimationWaitingOrder();
         }
 
         private void StartAnimationWaitingOrder()
         {
-            // Запустить анимацию ожидания
+            animator.SetFloat("Animation", 0);
         }
 
         private void ChangeState()
         {
+            characterController.AdministratorController.OnWorkForCook -= ChangeState;
             cookState.Cogitation();
         }
     }

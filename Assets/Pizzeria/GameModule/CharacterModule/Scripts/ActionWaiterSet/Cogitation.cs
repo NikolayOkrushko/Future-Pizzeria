@@ -24,8 +24,10 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
         private void GetVisitorWhoNeedTakeOrder()
         {
             var result = characterController.GetVisitorWhoNeedTakeOrder();
+
             if (result != null)
             {
+                characterController.AdministratorController.OnWorkForWaiter -= GetVisitorWhoNeedTakeOrder;
                 waiterState.ApproachTheVisitor(result);
             }
             else
@@ -39,11 +41,12 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
             var result = characterController.GetTheOrderWhichBringTheVisitor();
             if (result != null)
             {
+                characterController.AdministratorController.OnWorkForWaiter -= GetVisitorWhoNeedTakeOrder;
                 waiterState.TakeAwayReadyOrder(result);
             }
             else
             {
-                waiterState.GoTheWaitingArea();
+                characterController.AdministratorController.OnWorkForWaiter += GetVisitorWhoNeedTakeOrder;
             }
         }
     }

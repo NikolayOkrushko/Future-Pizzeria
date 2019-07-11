@@ -1,7 +1,5 @@
 ﻿using Pizzeria.GameModule.CharacterModule.States;
 using Pizzeria.GameModule.TableModule;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Pizzeria.GameModule.CharacterModule.ActionCookState

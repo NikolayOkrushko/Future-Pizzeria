@@ -8,8 +8,11 @@ namespace Pizzeria.GameModule.CharacterModule
 {
     public interface ICharacterController
     {
-        RootCharacterControllerTest RootCharacterModuleTest { get; }
+        IAdministratorController AdministratorController { get; }
         event Action OnOrderSelected;
+        event Action OnOrderPlaced;
+        event Action OnCookTaketheOrder;
+        void Init();
         void CreateCharacter(CharacterConteiner characterConteiner);
         #region Visitor
         void OrderSelected();
@@ -28,7 +31,6 @@ namespace Pizzeria.GameModule.CharacterModule
 
         #region Cook
         TableUniversal TakeOrderTheNeedToPrepare();
-        TableUniversal[] GetCookPlace();
         #endregion
     }
 }

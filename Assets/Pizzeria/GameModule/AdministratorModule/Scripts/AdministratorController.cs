@@ -1,5 +1,4 @@
-﻿using Pizzeria.GameModule.AdministratorModule.Test;
-using Pizzeria.GameModule.EnvironmentModule;
+﻿using Pizzeria.GameModule.EnvironmentModule;
 using Pizzeria.GameModule.RootModule;
 using Pizzeria.GameModule.TableModule;
 using System;
@@ -10,6 +9,9 @@ namespace Pizzeria.GameModule.AdministratorModule
 {
     public class AdministratorController : IAdministratorController, IOutAdministratorController
     {
+        public event Action OnWorkForWaiter;
+        public event Action OnWorkForCook;
+
         private TableUniversal freeTable;
         private IAdministrator administrator;
         private IEnvironmentController environmentController;
@@ -31,6 +33,12 @@ namespace Pizzeria.GameModule.AdministratorModule
         }
 
 
+        public void RemoveBusyTable(TableUniversal table)
+        {
+            administrator.RemoveBusyTable(table);
+        }
+
+
         public TableUniversal GetFreeVisitorTable()
         {
             if (administrator.GetFreeVisitorTable() != null)
@@ -41,25 +49,63 @@ namespace Pizzeria.GameModule.AdministratorModule
             return null;
         }
 
+        public List<Transform> GetExitPlaces()
+        {
+            var exitPlace = environmentController.GetExitPlace();
+            return exitPlace;
+        }
+
+        public List<Transform> GetDefaultWaiterPlaces()
+        {
+            var defaultWaiterPlaces = environmentController.GetDefaultWaiterPlaces();
+            return defaultWaiterPlaces;
+        }
+
+        public List<TableUniversal> GetCookTablePlace()
+        {
+            var cookTablePlaces = environmentController.GetCookTablePlaces();
+            return cookTablePlaces;
+        }
+
         public void CallTheWaiter(TableUniversal visitorTable)
         {
             administrator.AddTableWaitingForServiceInQueue(visitorTable);
+            if (OnWorkForWaiter != null)
+            {
+                OnWorkForWaiter();
+            }
         }
 
         public void AddOrderToQueueForCooking(TableUniversal visitorTable)
         {
             administrator.AddOrderToQueue(visitorTable);
+            if (OnWorkForCook != null)
+            {
+                OnWorkForCook();
+            }
         }
 
         public TableUniversal GetVisitorWhoNeedTakeOrder()
         {
-            return administrator.GetAcceptAnOrderFromVisitor();
-            //return null;
+            if (OnWorkForCook != null)
+            {
+                OnWorkForCook();
+            }
+
+
+            var result = administrator.GetAcceptAnOrderFromVisitor();
+            if (result != null)
+            {
+                return result;
+
+            }
+            return null;
         }
 
         public ReadyOrder GetTheOrderWhichBringTheVisitor()
         {
-            return administrator.GetBearAnOrderToVisitor();
+            var result = administrator.GetBearAnOrderToVisitor();
+            return result;
         }
 
 
@@ -71,6 +117,10 @@ namespace Pizzeria.GameModule.AdministratorModule
         public void AddOrderPrepared(ReadyOrder readyOrder)
         {
             administrator.AddOrderPreparedInQueue(readyOrder);
+            if (OnWorkForWaiter != null)
+            {
+                OnWorkForWaiter();
+            }
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using Pizzeria.GameModule.AdministratorModule;
 using Pizzeria.GameModule.CharacterModule.States;
 using Pizzeria.GameModule.TableModule;
+using UnityEngine;
 
 namespace Pizzeria.GameModule.CharacterModule.ActionCookState
 {
@@ -30,11 +31,12 @@ namespace Pizzeria.GameModule.CharacterModule.ActionCookState
         private void CreateAFinishedOrder()
         {
             createdReadyOrder = new ReadyOrder(visitorTable, cookState.cookTable);
+            ReturnOrderToAdministrator(createdReadyOrder);
         }
 
         private void ReturnOrderToAdministrator(ReadyOrder readyOrder)
         {
-            // обратится к Админмстратору что бы заполнить готовые заказы
+            characterController.AdministratorController.AddOrderPrepared(readyOrder);
             ChangeState();
         }
 

@@ -1,4 +1,6 @@
 ﻿
+using Pizzeria.GameModule.RootModule;
+using Pizzeria.GameModule.TableModule;
 using UnityEngine;
 using UnityEngine.AI;
 namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
@@ -10,16 +12,18 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
         private NavMeshAgent navMeshAgent;
         private ICharacterController characterController;
         private Transform[] exitPlace;
+        private TableUniversal table;
         private bool isHappy;
 
 
-        public LeaveTheHall(ICharacterController controller, Visitor currentVisitorState, Animator currentAnimator, NavMeshAgent currentNavMeshAgent, bool vistorIsHappy)
+        public LeaveTheHall(ICharacterController controller, Visitor currentVisitorState, Animator currentAnimator, NavMeshAgent currentNavMeshAgent, bool vistorIsHappy, TableUniversal currentTable)
         {
             characterController = controller;
             isHappy = vistorIsHappy;
             visitorState = currentVisitorState;
             animator = currentAnimator;
             navMeshAgent = currentNavMeshAgent;
+            table = currentTable;
         }
 
 
@@ -44,6 +48,7 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
 
         private void GetUpFromTheTable()
         {
+            table.ReleaseTheTable();
             animator.SetTrigger("StandUp");
         }
 
@@ -59,7 +64,7 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
             if (isHappy)
             {
                 navMeshAgent.destination = movePoint.position;
-                navMeshAgent.speed = 2f;
+                navMeshAgent.speed = 4f;
                 animator.SetFloat("Speed", 2.5f);
             }
             else if (!isHappy)
@@ -69,12 +74,12 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
                 animator.SetFloat("Speed", -1f);
             }
 
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate += CustomUpdate;
+            RootController.globalUpdate.OnCustomUpdate += CustomUpdate;
         }
 
         private void OnTargetDestinate()
         {
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate -= CustomUpdate;
+            RootController.globalUpdate.OnCustomUpdate -= CustomUpdate;
             animator.SetFloat("Speed", 1f);
             navMeshAgent.isStopped = true;
         }

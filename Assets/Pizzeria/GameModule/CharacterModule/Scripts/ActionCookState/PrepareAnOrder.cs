@@ -1,4 +1,5 @@
 ﻿using Pizzeria.GameModule.CharacterModule.States;
+using Pizzeria.GameModule.RootModule;
 using Pizzeria.GameModule.TableModule;
 using System;
 using UnityEngine;
@@ -28,7 +29,7 @@ namespace Pizzeria.GameModule.CharacterModule.ActionCookState
 
         public void Execute()
         {
-            // Подписатся на Update
+            PrepareForCoocking();
         }
 
 
@@ -44,15 +45,23 @@ namespace Pizzeria.GameModule.CharacterModule.ActionCookState
             }
         }
 
+        private void PrepareForCoocking()
+        {
+            var changeTime = UnityEngine.Random.Range(0, coockingTimes.Length);
+            var selectedTime = coockingTimes[changeTime];
+            coockingTime = selectedTime;
+            RootController.globalUpdate.OnCustomUpdate += CustomUpdate;
+        }
+
         private void StartCoocking()
         {
-            // Запуск анимации готовки еды
+            animator.SetFloat("Animation", 4);
         }
 
         private void ChangeState()
         {
+            RootController.globalUpdate.OnCustomUpdate -= CustomUpdate;
             cookState.GiveTheFinishOrder(visitorTable);
         }
-
     }
 }

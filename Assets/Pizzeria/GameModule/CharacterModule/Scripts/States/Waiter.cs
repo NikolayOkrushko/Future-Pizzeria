@@ -8,6 +8,8 @@ namespace Pizzeria.GameModule.CharacterModule.States
 {
     public class Waiter : MonoBehaviour, IWaiter
     {
+        public Transform WaitPointWaiter { get; private set; }
+
         private ICharacterController characterController;
         private IBehaviour currentBehaviuor;
         private TableUniversal currentTable;
@@ -21,12 +23,13 @@ namespace Pizzeria.GameModule.CharacterModule.States
             characterController = controller;
             animator = GetComponent<Animator>();
             navMeshAgent = GetComponent<NavMeshAgent>();
+            ChangeWaiterDefaultPoint();
             Execute();
         }
 
         public void Execute()
         {
-            Cogitation();
+            GoTheWaitingArea();
         }
 
 
@@ -48,6 +51,15 @@ namespace Pizzeria.GameModule.CharacterModule.States
         public void TakeAwayReadyOrder(ReadyOrder readyOrder)
         {
             currentBehaviuor = new TakeAwayReadyOrder(this, characterController, animator, navMeshAgent, readyOrder);
+        }
+
+
+        private void ChangeWaiterDefaultPoint()
+        {
+            var getPointArray = characterController.GetPlaceToWait();
+            var changePoint = Random.Range(0, getPointArray.Length);
+
+            WaitPointWaiter = getPointArray[changePoint];
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Pizzeria.GameModule.CharacterModule.States;
+using Pizzeria.GameModule.RootModule;
 using Pizzeria.GameModule.TableModule;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,6 +10,7 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
     {
         private Waiter waiterState;
         private ICharacterController characterController;
+        private ICharacterController visitorCharacterController;
         private TableUniversal visitorTable;
         private Animator animator;
         private NavMeshAgent navMeshAgent;
@@ -47,7 +49,7 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
 
         private void PrepareForMovenment()
         {
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate += CustomUpdate;
+            RootController.globalUpdate.OnCustomUpdate += CustomUpdate;
             ChoosePlaceToBecome();
         }
 
@@ -67,52 +69,47 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
 
         private void StopMove()
         {
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate -= CustomUpdate;
-            navMeshAgent.isStopped = true;
-
             if (!isApproachedTheVisitor)
             {
                 TurnToVisitorTable();
-            }
-            else if (isApproachedTheVisitor)
-            {
-                GiveAwayVisitorWhoNeedTakeOrder();
             }
         }
 
         private void TurnToVisitorTable()
         {
+            isApproachedTheVisitor = true;
             animator.SetFloat("Animation", 0);
             waiterState.transform.LookAt(visitorTable.transform.position);
-            isApproachedTheVisitor = true;
+
             FindOutWhoSitAtTheTable();
         }
 
         private void FindOutWhoSitAtTheTable()
         {
-            visitorTable.GetVisitor();
+            visitorCharacterController = visitorTable.GetVisitor();
+            WaitUntillTheVisitorChoosesOrder();
         }
 
         private void WaitUntillTheVisitorChoosesOrder()
         {
-            characterController.OnOrderSelected += ChangeCookPlace;
+            visitorCharacterController.OnOrderSelected += GiveAwayVisitorWhoNeedTakeOrder;
         }
 
-        private void ChangeCookPlace()
-        {
-            characterController.OnOrderSelected -= ChangeCookPlace;
-            var result = characterController.GetCookTablePlace();
-            var changeCookPlace = Random.Range(0, result.Length);
-            GoToTheCookBar(result[changeCookPlace]);
-        }
+        //private void ChangeCookPlace()
+        //{
+        //    visitorCharacterController.OnOrderSelected -= ChangeCookPlace;
+        //    var result = characterController.GetCookTablePlace();
+        //    var changeCookPlace = Random.Range(0, result.Length);
+        //    GoToTheCookBar(result[changeCookPlace]);
+        //}
 
-        private void GoToTheCookBar(TableUniversal cookTable)
-        {
-            animator.SetFloat("Animation", 1);
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate += CustomUpdate;
-            navMeshAgent.isStopped = false;
-            navMeshAgent.destination = cookTable.transform.position;
-        }
+        //private void GoToTheCookBar(TableUniversal cookTable)
+        //{
+        //    animator.SetFloat("Animation", 1);
+        //    RootController.globalUpdate.OnCustomUpdate += CustomUpdate;
+        //    navMeshAgent.isStopped = false;
+        //    navMeshAgent.destination = cookTable.transform.position;
+        //}
 
         private void GiveAwayVisitorWhoNeedTakeOrder()
         {
@@ -124,7 +121,9 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
         {
             animator.SetFloat("Animation", 0);
             navMeshAgent.isStopped = false;
-            waiterState.Cogitation();
+            RootController.globalUpdate.OnCustomUpdate -= CustomUpdate;
+            visitorCharacterController.OnOrderSelected -= GiveAwayVisitorWhoNeedTakeOrder;
+            waiterState.GoTheWaitingArea();
         }
 
     }

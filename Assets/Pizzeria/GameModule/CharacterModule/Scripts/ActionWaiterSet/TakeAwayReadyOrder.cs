@@ -1,5 +1,6 @@
 ﻿using Pizzeria.GameModule.AdministratorModule;
 using Pizzeria.GameModule.CharacterModule.States;
+using Pizzeria.GameModule.RootModule;
 using Pizzeria.GameModule.TableModule;
 using UnityEngine;
 using UnityEngine.AI;
@@ -32,9 +33,7 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
 
         public void Execute()
         {
-            Debug.Log("Execute сработал отлично");
             DetermineWhichCookPickUpOrder();
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate += CustomUpdate;
         }
 
         private void CustomUpdate()
@@ -62,6 +61,7 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
 
         private void DetermineWhichCookPickUpOrder()
         {
+            RootController.globalUpdate.OnCustomUpdate += CustomUpdate;
             var currentCookTable = readyOrder.CookTable();
             var waiterPlace = currentCookTable.GetWaiterPlace();
             var movePoint = Random.Range(0, waiterPlace.Length);
@@ -78,7 +78,6 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
         private void TurnToCook()
         {
             animator.SetFloat("Animator", 0);
-            Debug.Log("Успешно повернулся на повара");
             TakeOrderFromTheCook = true;
             waiterState.transform.LookAt(cookTable.transform.position);
             PickUpTheOrderFromTheCook();
@@ -109,7 +108,6 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
         private void TurnToVisitor()
         {
             animator.SetFloat("Animation", 0);
-            Debug.Log("Успешно повернулся на посетителя");
             waiterState.transform.LookAt(cookTable.transform.position);
             PutOrderOnTheTable();
         }
@@ -117,14 +115,14 @@ namespace Pizzeria.GameModule.CharacterModule.ActionWaiterSet
         private void PutOrderOnTheTable()
         {
             // Запуск анимации ставить на стол пиццу
+            visitorTable.FoodOnTheTable();
             ChangeState();
         }
 
         private void ChangeState()
         {
             navMeshAgent.isStopped = false;
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate -= CustomUpdate;
-            Debug.Log("Состояние успешно изменилось ");
+            RootController.globalUpdate.OnCustomUpdate -= CustomUpdate;
             waiterState.Cogitation();
         }
     }

@@ -1,4 +1,6 @@
-﻿using Pizzeria.GameModule.CharacterModule;
+﻿using Pizzeria.GameModule.AdministratorModule;
+using Pizzeria.GameModule.CharacterModule;
+using Pizzeria.GameModule.RootModule;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,11 +10,13 @@ namespace Pizzeria.GameModule.TableModule
     public class TableUniversal : MonoBehaviour
     {
         public event Action OnWaiterCome;
+        public event Action OnFoodOnTheTable;
         public int TableID { get { return tableID; } }
 
         [SerializeField] private int tableID;
         [SerializeField] private List<Transform> usualPlaces = new List<Transform>();
         [SerializeField] private List<Transform> waiterPlaces = new List<Transform>();
+        private IAdministratorController administratorController;
 
         private ICharacterController currentVisitor;
 
@@ -20,17 +24,17 @@ namespace Pizzeria.GameModule.TableModule
         public void TakeATable(ICharacterController visitor)
         {
             currentVisitor = visitor;
-            // Вызывается метод у Administrator Hall "TakeAnOrder" и передаёт в качестве параметра себя.
+            administratorController = RootController.GetControllerByType<IAdministratorController>();
         }
 
         public void CallTheWaiter()
         {
-            // стол обращается к админу что бы тот записал его в очередь
+            administratorController.CallTheWaiter(this);
         }
 
         public void ReleaseTheTable()
         {
-
+            administratorController.RemoveBusyTable(this);
         }
 
         public ICharacterController GetVisitor()
@@ -56,6 +60,14 @@ namespace Pizzeria.GameModule.TableModule
         public Transform[] GetWaiterPlace()
         {
             return waiterPlaces.ToArray();
+        }
+
+        public void FoodOnTheTable()
+        {
+            if (OnFoodOnTheTable != null)
+            {
+                OnFoodOnTheTable();
+            }
         }
 
     }

@@ -1,6 +1,6 @@
-﻿using CharacterModule.Test;
-using Pizzeria.GameModule.AdministratorModule;
+﻿using Pizzeria.GameModule.AdministratorModule;
 using Pizzeria.GameModule.CharacterModule.States;
+using Pizzeria.GameModule.RootModule;
 using Pizzeria.GameModule.TableModule;
 using System;
 using UnityEngine;
@@ -16,14 +16,22 @@ namespace Pizzeria.GameModule.CharacterModule
 
     public class CharacterController : ICharacterController, IOutCharacterController
     {
-        public RootCharacterControllerTest RootCharacterModuleTest { get; private set; }
+        public IAdministratorController AdministratorController { get; private set; }
         public event Action OnOrderSelected;
+        public event Action OnOrderPlaced;
+        public event Action OnCookTaketheOrder;
 
         private ICook cook;
         private IVisitor visitor;
         private IWaiter waiter;
         private CharacterConteiner characterConteiner;
 
+
+
+        public void Init()
+        {
+            RootController.OnModuleAreReady += Start;
+        }
 
 
         public void CreateCharacter(CharacterConteiner conteiner)
@@ -34,12 +42,12 @@ namespace Pizzeria.GameModule.CharacterModule
             {
                 case CharacterConteiner.Visitor:
                     var visitorPrefab = Resources.Load<GameObject>("VisitorConteiner");
-                    visitor = GameObject.Instantiate<GameObject>(visitorPrefab).AddComponent<Visitor>();
+                    visitor = GameObject.Instantiate<GameObject>(visitorPrefab, new Vector3(16, 2, 16), Quaternion.identity).AddComponent<Visitor>();
                     visitor.Init(this);
                     break;
                 case CharacterConteiner.Waiter:
                     var waiterPrefab = Resources.Load<GameObject>("WaiterConteiner");
-                    waiter = GameObject.Instantiate<GameObject>(waiterPrefab).AddComponent<Waiter>();
+                    waiter = GameObject.Instantiate<GameObject>(waiterPrefab, new Vector3(16, 1.5f, 16), Quaternion.identity).AddComponent<Waiter>();
                     waiter.Init(this);
                     break;
                 case CharacterConteiner.Cook:
@@ -63,13 +71,13 @@ namespace Pizzeria.GameModule.CharacterModule
 
         public TableUniversal GetFreeTable()
         {
-            var table = RootCharacterModuleTest.GetTable();
+            var table = AdministratorController.GetFreeVisitorTable();
             return table;
         }
 
         public Transform[] GetExitPlace()
         {
-            return RootCharacterModuleTest.GetExitPlace();
+            return AdministratorController.GetExitPlaces().ToArray();
         }
 
         public void LeaveFeedback(bool feedback)
@@ -81,45 +89,58 @@ namespace Pizzeria.GameModule.CharacterModule
         #region Waiter
         public TableUniversal GetVisitorWhoNeedTakeOrder()
         {
-            //return RootCharacterModuleTest.GetTable();
-            return null;
+            var result = AdministratorController.GetVisitorWhoNeedTakeOrder();
+            if (result != null)
+            {
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
         public ReadyOrder GetTheOrderWhichBringTheVisitor()
         {
-            var result = RootCharacterModuleTest.GetReadyOrder();
+            var result = AdministratorController.GetTheOrderWhichBringTheVisitor();
             return result;
-            //return null;
         }
 
         public Transform[] GetPlaceToWait()
         {
-            return RootCharacterModuleTest.GetDefaultWaiterPlaces();
+            var waiterPlaces = AdministratorController.GetDefaultWaiterPlaces().ToArray();
+            return waiterPlaces;
         }
 
         public TableUniversal[] GetCookTablePlace()
         {
-            return RootCharacterModuleTest.CookTablePlaces();
+            return AdministratorController.GetCookTablePlace().ToArray();
         }
 
         public void AddOrderToQueueForCooking(TableUniversal visitorTable)
         {
-            Debug.Log(visitorTable.TableID);
+            AdministratorController.AddOrderToQueueForCooking(visitorTable);
+            if (OnCookTaketheOrder != null)
+            {
+                OnCookTaketheOrder();
+            }
         }
         #endregion
 
         #region Cook
         public TableUniversal TakeOrderTheNeedToPrepare()
         {
-            return null;
+            var result = AdministratorController.GetOrderNeedToPrepared();
+            return result;
         }
-
-        public TableUniversal[] GetCookPlace()
-        {
-            return null;
-        }
-
 
         #endregion
+
+        private void Start()
+        {
+            RootController.OnModuleAreReady -= Start;
+            AdministratorController = RootController.GetControllerByType<IAdministratorController>();
+        }
     }
 }

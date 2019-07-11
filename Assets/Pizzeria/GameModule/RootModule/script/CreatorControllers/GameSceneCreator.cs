@@ -1,6 +1,7 @@
 ﻿using Pizzeria.GameModule.AdministratorModule;
 using Pizzeria.GameModule.CharacterModule;
 using Pizzeria.GameModule.DirectorModule;
+using Pizzeria.GameModule.DoormanModule;
 using Pizzeria.GameModule.EnvironmentModule;
 using System;
 using System.Collections.Generic;
@@ -28,10 +29,15 @@ namespace Pizzeria.GameModule.RootModule.ControllerCreators
 
             ICharacterController CharacterController = new Pizzeria.GameModule.CharacterModule.CharacterController();
             moduleControllers.Add(typeof(ICharacterController), CharacterController);
+            CharacterController.Init();
 
             IDirectorController DirectorController = new DirectorController();
             moduleControllers.Add(typeof(IDirectorController), DirectorController);
             DirectorController.Init();
+
+            IDoormanController DoormanController = new DoormanController();
+            moduleControllers.Add(typeof(IDoormanController), DoormanController);
+            DoormanController.Init();
 
             return moduleControllers;
         }

@@ -1,6 +1,4 @@
-﻿
-using Pizzeria.GameModule.AdministratorModule;
-using Pizzeria.GameModule.RootModule;
+﻿using Pizzeria.GameModule.RootModule;
 using Pizzeria.GameModule.TableModule;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +20,24 @@ namespace Pizzeria.GameModule.EnvironmentModule
         {
             return environmentMain.GetTables();
         }
+
+
+        public List<Transform> GetExitPlace()
+        {
+            return environmentMain.GetExitPlace();
+        }
+
+        public List<Transform> GetDefaultWaiterPlaces()
+        {
+            return environmentMain.GetDefaultWaiterPlaces();
+        }
+
+        public List<TableUniversal> GetCookTablePlaces()
+        {
+            return environmentMain.GetCookTablePlaces();
+        }
+
+
 
         private void Start()
         {

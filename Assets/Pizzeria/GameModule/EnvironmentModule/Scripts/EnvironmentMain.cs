@@ -20,6 +20,7 @@ namespace Pizzeria.GameModule.EnvironmentModule
 
             var hallPrefab = Resources.Load<GameObject>("Hall");
             hallMain = GameObject.Instantiate<GameObject>(hallPrefab).GetComponent<IHallMain>();
+            hallMain.Init();
         }
 
 
@@ -28,5 +29,19 @@ namespace Pizzeria.GameModule.EnvironmentModule
             return hallMain.GetTable();
         }
 
+        public List<Transform> GetExitPlace()
+        {
+            return hallMain.GetExitPlaces();
+        }
+
+        public List<Transform> GetDefaultWaiterPlaces()
+        {
+            return hallMain.GetDefaultWaiterPlaces();
+        }
+
+        public List<TableUniversal> GetCookTablePlaces()
+        {
+            return hallMain.GetCookTablePlaces();
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using CharacterModule.ActionVisitorSet;
-using Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet;
+﻿using Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet;
 using Pizzeria.GameModule.TableModule;
 using UnityEngine;
 using UnityEngine.AI;
@@ -54,16 +53,27 @@ namespace Pizzeria.GameModule.CharacterModule.States
         }
 
 
-        public void TakingFood()
+        public void DetermineTheOrder()
         {
-            currentBehaviuor = new TakingFood(characterController, this, animator);
+            currentBehaviuor = new DetermineTheOrder(characterController, this, animator);
         }
 
+        public void WaitTheFinishOrder()
+        {
+            currentBehaviuor = new WaitTheFinishOrder(this, characterController, animator, currentTable);
+            Execute();
+        }
+
+        public void TakeAFood()
+        {
+            currentBehaviuor = new TakeAFood(this, characterController, animator);
+            Execute();
+        }
 
         public void LeaveTheHall(bool isHappy)
         {
             isVisitorHappy = isHappy;
-            currentBehaviuor = new LeaveTheHall(characterController, this, animator, navMeshAgent, isVisitorHappy);
+            currentBehaviuor = new LeaveTheHall(characterController, this, animator, navMeshAgent, isVisitorHappy, currentTable);
             Execute();
         }
     }

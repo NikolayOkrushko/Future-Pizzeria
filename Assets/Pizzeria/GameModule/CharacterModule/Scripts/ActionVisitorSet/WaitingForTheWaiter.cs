@@ -1,4 +1,5 @@
 ﻿
+using Pizzeria.GameModule.RootModule;
 using Pizzeria.GameModule.TableModule;
 using System;
 using UnityEngine;
@@ -51,12 +52,12 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
         {
             var changeWaitingTime = UnityEngine.Random.Range(0, waitingTimes.Length);
             waitingTime = waitingTimes[changeWaitingTime];
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate += CustomUpdate;
+            RootController.globalUpdate.OnCustomUpdate += CustomUpdate;
         }
 
         private void WaitingWaiter()
         {
-            table.OnWaiterCome += ChangeStateToTakingFood;
+            table.OnWaiterCome += ChangeState;
         }
 
         private void ChangeAnimationWaiting()
@@ -79,17 +80,18 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
 
         private void LeaveAwayFromHall()
         {
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate -= CustomUpdate;
+            Debug.Log("LeaveAway");
+            RootController.globalUpdate.OnCustomUpdate -= CustomUpdate;
             visitorState.visitorAnimatorController.OnAnimationEnd -= ChangeAnimationWaiting;
             visitorState.LeaveTheHall(false);
         }
 
-        private void ChangeStateToTakingFood()
+        private void ChangeState()
         {
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate -= CustomUpdate;
-            table.OnWaiterCome -= ChangeStateToTakingFood;
+            RootController.globalUpdate.OnCustomUpdate -= CustomUpdate;
+            table.OnWaiterCome -= ChangeState;
             visitorState.visitorAnimatorController.OnAnimationEnd -= ChangeAnimationWaiting;
-            visitorState.TakingFood();
+            visitorState.DetermineTheOrder();
         }
     }
 }

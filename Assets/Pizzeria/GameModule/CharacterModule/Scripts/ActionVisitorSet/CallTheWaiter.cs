@@ -1,4 +1,5 @@
-﻿using Pizzeria.GameModule.TableModule;
+﻿using Pizzeria.GameModule.RootModule;
+using Pizzeria.GameModule.TableModule;
 using System;
 using UnityEngine;
 
@@ -52,14 +53,14 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
 
         private void SelectOrder()
         {
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate += CustomUpdate;
+            RootController.globalUpdate.OnCustomUpdate += CustomUpdate;
             animator.SetFloat("Sitting", 3);
         }
 
 
         private void CallWaiter()
         {
-            characterController.RootCharacterModuleTest.GlobalUpdate.OnCustomUpdate -= CustomUpdate;
+            RootController.globalUpdate.OnCustomUpdate -= CustomUpdate;
             table.CallTheWaiter();
             ChangeStateToWait();
         }
