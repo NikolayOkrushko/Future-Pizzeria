@@ -3,6 +3,7 @@ using Pizzeria.GameModule.Environment.HallModule;
 using Pizzeria.GameModule.AdministratorModule;
 using Pizzeria.GameModule.TableModule;
 using System.Collections.Generic;
+using Pizzeria.GameModule.OrderBoardModule;
 
 namespace Pizzeria.GameModule.EnvironmentModule
 {
@@ -42,6 +43,12 @@ namespace Pizzeria.GameModule.EnvironmentModule
         public List<TableUniversal> GetCookTablePlaces()
         {
             return hallMain.GetCookTablePlaces();
+        }
+
+        public OrderBoardController GetOrderBoardController()
+        {
+            var result = hallMain.GetOrderBoardController();
+            return result;
         }
     }
 }

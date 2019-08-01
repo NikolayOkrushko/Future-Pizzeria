@@ -1,18 +1,25 @@
-﻿using Pizzeria.GameModule.TableModule;
+﻿using Pizzeria.GameModule.OrderBoardModule;
+using Pizzeria.GameModule.TableModule;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
+using System.Linq;
+using Pizzeria.GameModule.EnvironmentModule;
+using Pizzeria.GameModule.RootModule;
 
 namespace Pizzeria.GameModule.AdministratorModule
 {
     public class Administrator : MonoBehaviour, IAdministrator
     {
+        private IEnvironmentController environmentController;
         private List<TableUniversal> visitorFreeTables = new List<TableUniversal>();
-        private Dictionary<int, TableUniversal> visitorBusyTables = new Dictionary<int, TableUniversal>();
+        private List<TableUniversal> visitorBusyTables = new List<TableUniversal>();
         private Queue<TableUniversal> ordersBegingPrepared = new Queue<TableUniversal>();
-        private Queue<TableUniversal> tablesWaitingForTheWaiter = new Queue<TableUniversal>();
+        private List<TableUniversal> tablesWaitingForTheWaiter = new List<TableUniversal>();
         private Queue<ReadyOrder> orderPrepareds = new Queue<ReadyOrder>();
-
-
+        private List<TableUniversal> cookTablePlaces;
+        private StringBuilder message = new StringBuilder();
+        private OrderBoardController orderBoard;
         private int freeTableIndex;
         private IAdministratorController administratorController;
 
@@ -20,6 +27,9 @@ namespace Pizzeria.GameModule.AdministratorModule
         public void Init(IAdministratorController controller)
         {
             administratorController = controller;
+            orderBoard = administratorController.GetOrderBoardController();
+            environmentController = RootController.GetControllerByType<IEnvironmentController>();
+            cookTablePlaces = environmentController.GetCookTablePlaces();
         }
 
         #region Out
@@ -38,8 +48,12 @@ namespace Pizzeria.GameModule.AdministratorModule
 
         public void RemoveBusyTable(TableUniversal table)
         {
-            visitorBusyTables.Remove(table.TableID);
             visitorFreeTables.Add(table);
+            var currentTable = tablesWaitingForTheWaiter.IndexOf(table);
+            if (tablesWaitingForTheWaiter.Contains(table))
+            {
+                tablesWaitingForTheWaiter.RemoveAt(tablesWaitingForTheWaiter.IndexOf(table));
+            }
         }
 
         public TableUniversal GetFreeVisitorTable()
@@ -47,12 +61,13 @@ namespace Pizzeria.GameModule.AdministratorModule
             var RandomTable = Random.Range(0, visitorFreeTables.Count);
             freeTableIndex = RandomTable;
 
+
+
             if (visitorFreeTables.Count > 0)
             {
-                var currentTable = visitorFreeTables[freeTableIndex];
+                var currentTable = visitorFreeTables[freeTableIndex]; // заменить на freeTableIndex
 
-
-                AddVisitorBusyTable(freeTableIndex);
+                AddVisitorBusyTable(currentTable);
                 return currentTable;
             }
             return null;
@@ -72,21 +87,20 @@ namespace Pizzeria.GameModule.AdministratorModule
             throw new System.NotImplementedException();
         }
 
-        public List<TableUniversal> GetCookTablePlace()
-        {
-            throw new System.NotImplementedException();
-        }
 
         public void AddTableWaitingForServiceInQueue(TableUniversal visitorTable)
         {
-            tablesWaitingForTheWaiter.Enqueue(visitorTable);
+            tablesWaitingForTheWaiter.Add(visitorTable);
         }
 
         public TableUniversal GetAcceptAnOrderFromVisitor()
         {
             if (tablesWaitingForTheWaiter.Count > 0)
             {
-                return tablesWaitingForTheWaiter.Dequeue();
+                var firstTable = tablesWaitingForTheWaiter.First();
+                var checkElementInList = tablesWaitingForTheWaiter.IndexOf(firstTable);
+                tablesWaitingForTheWaiter.RemoveAt(checkElementInList);
+                return firstTable;
             }
             return null;
         }
@@ -95,16 +109,34 @@ namespace Pizzeria.GameModule.AdministratorModule
         {
             if (orderPrepareds.Count > 0)
             {
-                return orderPrepareds.Dequeue();
+                DisplayReadyOrders();
+                var order = orderPrepareds.Dequeue();
+                return order;
             }
             return null;
         }
         #endregion
 
         #region Cook
+        public List<TableUniversal> GetCookTablePlace()
+        {
+            if (cookTablePlaces.Count > 0)
+            {
+                var result = cookTablePlaces;
+                return result;
+            }
+            return null;
+        }
+
+        public void RemoveCookTable(TableUniversal cookTable)
+        {
+            cookTablePlaces.RemoveAt(cookTablePlaces.IndexOf(cookTable));
+        }
+
         public void AddOrderToQueue(TableUniversal visitorTable)
         {
             ordersBegingPrepared.Enqueue(visitorTable);
+            DisplayNewOrders();
         }
 
         public TableUniversal GetOrderNeedToPrepared()
@@ -128,10 +160,36 @@ namespace Pizzeria.GameModule.AdministratorModule
             visitorFreeTables.Add(visitorTable);
         }
 
-        private void AddVisitorBusyTable(int visitorTable)
+        private void AddVisitorBusyTable(TableUniversal visitorTable)
         {
-            visitorBusyTables.Add(visitorTable, visitorFreeTables[visitorTable]);
-            visitorFreeTables.RemoveAt(visitorTable);
+            visitorBusyTables.Add(visitorTable);
+            visitorFreeTables.RemoveAt(visitorFreeTables.IndexOf(visitorTable));
+        }
+
+        private void DisplayNewOrders()
+        {
+            message.Clear();
+            int count = ordersBegingPrepared.Count;
+
+            foreach (var table in ordersBegingPrepared)
+            {
+                message.Append(table.TableID);
+                message.Append(" | ");
+            }
+            orderBoard.DisplayInformationOnFirstBoard(message.ToString());
+        }
+
+        private void DisplayReadyOrders()
+        {
+            message.Clear();
+            int count = orderPrepareds.Count;
+
+            foreach (var order in orderPrepareds)
+            {
+                message.Append(order.VisitorTable().TableID);
+                message.Append(" | ");
+            }
+            orderBoard.DisplayInformationOnSecondBoard(message.ToString());
         }
     }
 }

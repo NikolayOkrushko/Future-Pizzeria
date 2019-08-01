@@ -41,6 +41,7 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
         {
             if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
             {
+                Debug.Log("Посетитель идёт в указанную точку");
                 OnTargetDestinate();
             }
         }

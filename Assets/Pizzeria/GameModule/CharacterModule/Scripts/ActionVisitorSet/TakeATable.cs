@@ -27,8 +27,13 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
         public void Execute()
         {
             var table = characterController.GetFreeTable();
-            currentTable = table;
-            PrepareToMove(currentTable);
+
+            if (table != null)
+            {
+                currentTable = table;
+                PrepareToMove(currentTable);
+            }
+
         }
 
         private void CustomUpdate()

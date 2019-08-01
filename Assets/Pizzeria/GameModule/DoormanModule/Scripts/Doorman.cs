@@ -10,11 +10,19 @@ namespace Pizzeria.GameModule.DoormanModule
         private ICharacterController characterController;
 
 
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                RunTheVisitor();
+            }
+        }
+
+
         public void Init(IOutDoormanController controller)
         {
             doormanController = controller;
             characterController = RootController.GetControllerByType<ICharacterController>();
-            RunTheVisitor();
         }
 
 

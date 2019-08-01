@@ -1,21 +1,32 @@
 ﻿using Pizzeria.GameModule.CharacterModule;
 using Pizzeria.GameModule.RootModule;
-using System.Collections;
 using UnityEngine;
 
 namespace Pizzeria.GameModule.DirectorModule
 {
-    public class Director : IDirector
+    public class Director : MonoBehaviour, IDirector
     {
         private IOutDirectorController directorController;
         private ICharacterController characterController;
 
-        public Director(IOutDirectorController controller)
+        public void Init(IOutDirectorController controller)
         {
             directorController = controller;
-            CustomStart();
+            characterController = RootController.GetControllerByType<ICharacterController>();
         }
 
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                CreateACook();
+            }
+
+            else if (Input.GetKeyDown(KeyCode.W))
+            {
+                CreateAWaiter();
+            }
+        }
 
         public void CreateACook()
         {
@@ -30,13 +41,6 @@ namespace Pizzeria.GameModule.DirectorModule
         public void UpgradeACook()
         {
 
-        }
-
-        private void CustomStart()
-        {
-            characterController = RootController.GetControllerByType<ICharacterController>();
-            CreateAWaiter();
-            CreateACook();
         }
     }
 }

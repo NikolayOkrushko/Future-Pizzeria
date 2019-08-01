@@ -27,6 +27,7 @@ namespace Pizzeria.GameModule.CharacterModule
         Transform[] GetPlaceToWait();
         TableUniversal[] GetCookTablePlace();
         void AddOrderToQueueForCooking(TableUniversal visitorTable);
+        void RemoveCookTable(TableUniversal cookTable);
         #endregion
 
         #region Cook

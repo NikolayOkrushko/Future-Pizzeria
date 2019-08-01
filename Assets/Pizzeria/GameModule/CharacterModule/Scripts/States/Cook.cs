@@ -1,7 +1,6 @@
 ﻿using Pizzeria.GameModule.CharacterModule.ActionCookState;
 using Pizzeria.GameModule.TableModule;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.AI;
 using UnityEngine;
 namespace Pizzeria.GameModule.CharacterModule.States
 {
@@ -11,6 +10,7 @@ namespace Pizzeria.GameModule.CharacterModule.States
         private IBehaviour currentBehaviour;
         private ICharacterController characterController;
         private Animator animator;
+        private NavMeshAgent navMeshAgent;
 
 
 
@@ -18,6 +18,7 @@ namespace Pizzeria.GameModule.CharacterModule.States
         {
             characterController = controller;
             animator = GetComponent<Animator>();
+            navMeshAgent = GetComponent<NavMeshAgent>();
             Execute();
         }
 
@@ -36,7 +37,7 @@ namespace Pizzeria.GameModule.CharacterModule.States
 
         public void PutTheCookInHisPlace()
         {
-            currentBehaviour = new PutTheCookInHisPlace(this, characterController);
+            currentBehaviour = new PutTheCookInHisPlace(this, characterController, animator, navMeshAgent);
         }
 
         public void Cogitation()

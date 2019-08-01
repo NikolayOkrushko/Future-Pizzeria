@@ -1,4 +1,5 @@
 ﻿using Pizzeria.GameModule.EnvironmentModule;
+using Pizzeria.GameModule.OrderBoardModule;
 using Pizzeria.GameModule.RootModule;
 using Pizzeria.GameModule.TableModule;
 using System;
@@ -19,10 +20,13 @@ namespace Pizzeria.GameModule.AdministratorModule
 
         public void Init()
         {
-            administrator = new GameObject("Administrator").AddComponent<Administrator>();
-            administrator.Init(this);
-
             RootController.OnModuleAreReady += Start;
+        }
+
+        public OrderBoardController GetOrderBoardController()
+        {
+            var result = environmentController.GetOrderBoardController();
+            return result;
         }
 
 
@@ -41,12 +45,15 @@ namespace Pizzeria.GameModule.AdministratorModule
 
         public TableUniversal GetFreeVisitorTable()
         {
-            if (administrator.GetFreeVisitorTable() != null)
+            freeTable = administrator.GetFreeVisitorTable();
+            if (freeTable != null)
             {
-                freeTable = administrator.GetFreeVisitorTable();
                 return freeTable;
             }
-            return null;
+            else
+            {
+                return null;
+            }
         }
 
         public List<Transform> GetExitPlaces()
@@ -63,7 +70,7 @@ namespace Pizzeria.GameModule.AdministratorModule
 
         public List<TableUniversal> GetCookTablePlace()
         {
-            var cookTablePlaces = environmentController.GetCookTablePlaces();
+            var cookTablePlaces = administrator.GetCookTablePlace();
             return cookTablePlaces;
         }
 
@@ -108,6 +115,11 @@ namespace Pizzeria.GameModule.AdministratorModule
             return result;
         }
 
+        public void RemoveCookTable(TableUniversal cookTable)
+        {
+            administrator.RemoveCookTable(cookTable);
+        }
+
 
         public TableUniversal GetOrderNeedToPrepared()
         {
@@ -129,6 +141,8 @@ namespace Pizzeria.GameModule.AdministratorModule
             RootController.OnModuleAreReady -= Start;
 
             environmentController = RootController.GetControllerByType<IEnvironmentController>();
+            administrator = new GameObject("Administrator").AddComponent<Administrator>();
+            administrator.Init(this);
 
             administrator.GetTableHall();
         }

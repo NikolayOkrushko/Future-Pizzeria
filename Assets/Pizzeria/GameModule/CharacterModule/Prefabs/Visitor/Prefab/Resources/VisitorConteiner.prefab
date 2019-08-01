@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4702428968557972744}
   - component: {fileID: 4702428968557972745}
   - component: {fileID: 4702428968557972758}
-  - component: {fileID: 6890099746661437676}
+  - component: {fileID: 7628702985350332985}
   m_Layer: 0
   m_Name: VisitorConteiner
   m_TagString: Untagged
@@ -44,9 +44,9 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 1
+  m_Speed: 3
   m_Acceleration: 12
-  avoidancePriority: 50
+  avoidancePriority: 1
   m_AngularSpeed: 2500
   m_StoppingDistance: 0.01
   m_AutoTraverseOffMeshLink: 1
@@ -75,22 +75,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!208 &6890099746661437676
-NavMeshObstacle:
+--- !u!136 &7628702985350332985
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4702428968557972746}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 0.5, y: 1, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 1, z: 0}
-  m_TimeToStationary: 0.5
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  m_Radius: 0.5
+  m_Height: 2.1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.98, z: 0}
 --- !u!1001 &4702428966796270292
 PrefabInstance:
   m_ObjectHideFlags: 0

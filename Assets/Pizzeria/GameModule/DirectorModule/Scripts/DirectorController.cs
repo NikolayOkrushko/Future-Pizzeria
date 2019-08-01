@@ -34,7 +34,10 @@ namespace Pizzeria.GameModule.DirectorModule
         private void Start()
         {
             RootController.OnModuleAreReady -= Start;
-            director = new Director(this);
+
+            var directorPrefab = Resources.Load<GameObject>("HallDirector");
+            director = GameObject.Instantiate<GameObject>(directorPrefab).GetComponent<Director>();
+            director.Init(this);
         }
     }
 }

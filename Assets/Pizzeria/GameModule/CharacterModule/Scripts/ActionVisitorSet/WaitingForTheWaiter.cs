@@ -13,7 +13,7 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
         private ICharacterController characterController;
         private TableUniversal table;
         private DateTime timer = new DateTime();
-        private int[] waitingTimes = { 10, 12, 16, 19 };
+        private int[] waitingTimes = { 20, 26, 30, 50 };
         private int waitingTime;
         private int numberOfAnimationSitting = 2;
 
@@ -80,7 +80,6 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
 
         private void LeaveAwayFromHall()
         {
-            Debug.Log("LeaveAway");
             RootController.globalUpdate.OnCustomUpdate -= CustomUpdate;
             visitorState.visitorAnimatorController.OnAnimationEnd -= ChangeAnimationWaiting;
             visitorState.LeaveTheHall(false);

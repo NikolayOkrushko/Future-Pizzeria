@@ -1,4 +1,5 @@
 ﻿using Pizzeria.GameModule.AdministratorModule;
+using Pizzeria.GameModule.OrderBoardModule;
 using Pizzeria.GameModule.TableModule;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,5 +13,6 @@ namespace Pizzeria.GameModule.EnvironmentModule
         List<Transform> GetExitPlace();
         List<Transform> GetDefaultWaiterPlaces();
         List<TableUniversal> GetCookTablePlaces();
+        OrderBoardController GetOrderBoardController();
     }
 }

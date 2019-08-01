@@ -39,6 +39,8 @@ namespace Pizzeria.GameModule.RootModule.ControllerCreators
             moduleControllers.Add(typeof(IDoormanController), DoormanController);
             DoormanController.Init();
 
+
+
             return moduleControllers;
         }
     }

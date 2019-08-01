@@ -1,18 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine.UI;
 using UnityEngine;
+using System.Collections.Generic;
 
-public class UIBoard : MonoBehaviour
+namespace Pizzeria.GameModule.OrderBoardModule.UIBorderModule
 {
-    // Start is called before the first frame update
-    void Start()
+    public class UIBoard : MonoBehaviour, IUIBoard
     {
-        
-    }
+        [SerializeField] private List<Text> ordersWaitingForCooking = new List<Text>();
+        [SerializeField] private List<Text> readyOrders = new List<Text>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+
+        public void DisplayOrderMustBePrepared(int tableID)
+        {
+
+        }
+
+        public void RemoveFromDisplayOrderMustBePrepared(int tableID)
+        {
+
+        }
+
+        public void DisplayReadyOrder(int tableID)
+        {
+
+        }
+
+        public void RemoveFromDisplayReadyOrder(int tableID)
+        {
+
+        }
     }
 }

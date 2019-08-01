@@ -8,7 +8,7 @@ namespace Pizzeria.GameModule.DoormanModule
     {
         private IDoorman doorman;
 
-        
+
         public void Init()
         {
             RootController.OnModuleAreReady += Start;

@@ -57,12 +57,12 @@ namespace Pizzeria.GameModule.CharacterModule.States.ActionVisitorSet
 
         private void FinishEating()
         {
-            RootController.globalUpdate.OnCustomUpdate -= CustomUpdate;
             ChangeState();
         }
 
         private void ChangeState()
         {
+            RootController.globalUpdate.OnCustomUpdate -= CustomUpdate;
             visitorState.LeaveTheHall(true);
         }
 

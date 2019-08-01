@@ -16,6 +16,7 @@ namespace Pizzeria.GameModule.AdministratorModule
         void RemoveBusyTable(TableUniversal table);
         TableUniversal GetAcceptAnOrderFromVisitor();
         ReadyOrder GetBearAnOrderToVisitor();
+        void RemoveCookTable(TableUniversal cookTable);
         void AddOrderToQueue(TableUniversal visitorTable);
         TableUniversal GetOrderNeedToPrepared();
         void AddOrderPreparedInQueue(ReadyOrder readyOrder);

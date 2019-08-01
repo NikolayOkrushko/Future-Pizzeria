@@ -1,4 +1,5 @@
-﻿using Pizzeria.GameModule.RootModule;
+﻿using Pizzeria.GameModule.OrderBoardModule;
+using Pizzeria.GameModule.RootModule;
 using Pizzeria.GameModule.TableModule;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,6 +38,11 @@ namespace Pizzeria.GameModule.EnvironmentModule
             return environmentMain.GetCookTablePlaces();
         }
 
+        public OrderBoardController GetOrderBoardController()
+        {
+            var result = environmentMain.GetOrderBoardController();
+            return result;
+        }
 
 
         private void Start()

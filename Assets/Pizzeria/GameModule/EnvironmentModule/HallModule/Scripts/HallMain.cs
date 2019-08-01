@@ -2,6 +2,7 @@
 using Pizzeria.GameModule.TableModule;
 using System.Collections.Generic;
 using UnityEngine.AI;
+using Pizzeria.GameModule.OrderBoardModule;
 
 namespace Pizzeria.GameModule.Environment.HallModule
 {
@@ -12,6 +13,7 @@ namespace Pizzeria.GameModule.Environment.HallModule
         [SerializeField] private List<Transform> defaultWaiterPlaces = new List<Transform>();
         [SerializeField] private List<TableUniversal> cookTablePlace = new List<TableUniversal>();
         [SerializeField] private NavMeshSurface hallSurface;
+        [SerializeField] private OrderBoardController orderBoard;
 
 
 
@@ -38,6 +40,11 @@ namespace Pizzeria.GameModule.Environment.HallModule
         public List<TableUniversal> GetCookTablePlaces()
         {
             return cookTablePlace;
+        }
+
+        public OrderBoardController GetOrderBoardController()
+        {
+            return orderBoard;
         }
     }
 }

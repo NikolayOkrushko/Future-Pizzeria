@@ -14,7 +14,7 @@ namespace Pizzeria.GameModule.CharacterModule
         Cook
     }
 
-    public class CharacterController : ICharacterController, IOutCharacterController
+    public class CharacterController : ICharacterController
     {
         public IAdministratorController AdministratorController { get; private set; }
         public event Action OnOrderSelected;
@@ -52,7 +52,7 @@ namespace Pizzeria.GameModule.CharacterModule
                     break;
                 case CharacterConteiner.Cook:
                     var cookPrefab = Resources.Load<GameObject>("CookConteiner");
-                    cook = GameObject.Instantiate<GameObject>(cookPrefab).AddComponent<Cook>();
+                    cook = GameObject.Instantiate<GameObject>(cookPrefab, new Vector3(16, 1.5f, 16), Quaternion.identity).AddComponent<Cook>();
                     cook.Init(this);
                     break;
             }
@@ -115,7 +115,13 @@ namespace Pizzeria.GameModule.CharacterModule
 
         public TableUniversal[] GetCookTablePlace()
         {
-            return AdministratorController.GetCookTablePlace().ToArray();
+            var result = AdministratorController.GetCookTablePlace().ToArray();
+            if (result != null)
+            {
+                return result;
+            }
+
+            return null;
         }
 
         public void AddOrderToQueueForCooking(TableUniversal visitorTable)
@@ -129,6 +135,12 @@ namespace Pizzeria.GameModule.CharacterModule
         #endregion
 
         #region Cook
+
+        public void RemoveCookTable(TableUniversal cookTable)
+        {
+            AdministratorController.RemoveCookTable(cookTable);
+        }
+
         public TableUniversal TakeOrderTheNeedToPrepare()
         {
             var result = AdministratorController.GetOrderNeedToPrepared();
