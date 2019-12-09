@@ -1,9 +1,4 @@
 ﻿/*
-    Skywell Software
-    Andrii Danyliuk 
-    11.06.2019
-    andredaniluk@gmail.com
-
     GameConstants.
 */
 
