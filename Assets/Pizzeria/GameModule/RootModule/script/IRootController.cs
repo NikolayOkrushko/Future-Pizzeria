@@ -1,9 +1,4 @@
 ﻿/*
-    Skywell Software
-    Andrii Danyliuk 
-    10.06.2019
-    andredaniluk@gmail.com
-
     RootModule controller interface.
 */
 
