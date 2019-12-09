@@ -1,8 +1,5 @@
-using System.IO;
-
 using UnityEditor;
 using UnityEditor.Callbacks;
-using UnityEditor.iOS.Xcode;
 
 public static class PListProcessor
 {
